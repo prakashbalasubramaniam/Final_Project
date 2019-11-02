@@ -11,8 +11,8 @@ from FlaskAppAML import app
 
 from FlaskAppAML.forms import SubmissionForm
 
-BRAIN_ML_KEY=os.environ.get('API_KEY', "Pekic23FJhbeoTZPxXZ3fLf+GzClndM2oZ6hysHO751cCHZODOibCFdsWCEIYtciDPUZpVczaiApqz92SJr2dQ==")
-BRAIN_URL = os.environ.get('URL', "https://ussouthcentral.services.azureml.net/workspaces/ead721b8b1f44935986b706588a2e35b/services/46afc39db7ed4e629e454bd4ec9f6ee7/execute?api-version=2.0&details=true")
+BRAIN_ML_KEY=os.environ.get('API_KEY', "gvfv36vRto//lE2C68O8kOenlCU62cNj2V3G9mhvSn+dUE+VWWVCt0vBzvqLl/kQC69VAHMfwpuSkFkwaIFnxQ==")
+BRAIN_URL = os.environ.get('URL', "https://ussouthcentral.services.azureml.net/workspaces/ead721b8b1f44935986b706588a2e35b/services/cc338680cb684d819f2bd7c1df482abd/execute?api-version=2.0&details=true")
 # Deployment environment variables defined on Azure (pull in with os.environ)
 
 # Construct the HTTP request header
@@ -39,6 +39,7 @@ def home():
                     "input1": {
                     "ColumnNames": [
                         "Customer Lifetime Value",
+                        "Response",
                         "EmploymentStatus",
                         "Income",
                         "Monthly Premium Auto",
@@ -48,13 +49,14 @@ def home():
                     ],
                     "Values": [
                         [
-                        1,
-                        0,
-                        1,
-                        1,
-                        1,
-                        1,
-                        1
+                        15000.000,
+                        "",
+                        "Employed",
+                        62902,
+                        69,
+                        14,
+                        94,
+                        159.383042
                         ]
                     ]
                     }
@@ -73,11 +75,12 @@ def home():
         try:
             # response = requests.post(URL, headers=HEADERS, data=body)
             response = urllib.request.urlopen(req)
-            print(response)
+            #print(response)
+            #print(response[0].Results.output1)
             respdata = response.read()
             result = json.loads(str(respdata, 'utf-8'))
-            #result = do_something_pretty(result)
-            result = json.dumps(result, indent=4, sort_keys=True)
+            result = do_something_pretty(result)
+            #result = json.dumps(result, indent=4, sort_keys=True)
             #result=result1["Results"]["output1"]["value"]["Values"][7]
             return render_template(
                 'result.html',
@@ -128,7 +131,7 @@ def do_something_pretty(jsondata):
 
     # We only want the first array from the array of arrays under "Value" 
     # - it's cluster assignment and distances from all centroid centers from k-means model
-    value = jsondata[7]
+    value = jsondata["Results"]["output1"]["value"]["Values"][0]
     #valuelen = len(value)
     print(value)
     # Convert values (a list) to a list of tuples [(cluster#,distance),...]
@@ -142,7 +145,7 @@ def do_something_pretty(jsondata):
     # Build a placeholder for the cluster#,distance values
     #repstr = '<tr><td>%d</td><td>%s</td></tr>' * (valuelen-1)
     # print(repstr)
-    output='For a brain with the size of : '+ value[7]
+    output='For a brain with the size of : ' +value[2]+  "would they answer" +value[8]
     # Build the entire html table for the results data representation
     #tablestr = 'Cluster assignment: %s<br><br><table border="1"><tr><th>Cluster</th><th>Distance From Center</th></tr>'+ repstr + "</table>"
     #return tablestr % data
