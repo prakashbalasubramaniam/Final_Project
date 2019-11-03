@@ -47,16 +47,27 @@ def home():
                         "Months Since Policy Inception",
                         "Total Claim Amount"
                     ],
+                    # "Values": [
+                    #     [
+                    #     15000.000,
+                    #     "",
+                    #     "Employed",
+                    #     62902,
+                    #     69,
+                    #     14,
+                    #     94,
+                    #     159.383042
+                    #     ]
                     "Values": [
                         [
-                        15000.000,
+                        form.lifetime.data.lower(),
                         "",
-                        "Employed",
-                        62902,
-                        69,
-                        14,
-                        94,
-                        159.383042
+                        form.employment.data.lower(),
+                        form.income.data.lower(),
+                        form.premium.data.lower(),
+                        form.lastclaim.data.lower(),
+                        form.inception.data.lower(),
+                        form.claimamount.data.lower()
                         ]
                     ]
                     }
@@ -84,7 +95,7 @@ def home():
             #result=result1["Results"]["output1"]["value"]["Values"][7]
             return render_template(
                 'result.html',
-                title="This is the result from AzureML running our example Student Insurance Prediction:",
+                title="Insurance Customer Marketing Response Prediction:",
                 result=result)
 
         # An HTTP error
@@ -145,7 +156,7 @@ def do_something_pretty(jsondata):
     # Build a placeholder for the cluster#,distance values
     #repstr = '<tr><td>%d</td><td>%s</td></tr>' * (valuelen-1)
     # print(repstr)
-    output='For a brain with the size of : ' +value[2]+  "would they answer" +value[8]
+    output='The response from Customer : ' +value[8]
     # Build the entire html table for the results data representation
     #tablestr = 'Cluster assignment: %s<br><br><table border="1"><tr><th>Cluster</th><th>Distance From Center</th></tr>'+ repstr + "</table>"
     #return tablestr % data
